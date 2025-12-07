@@ -1,0 +1,5 @@
+from,input,pop,to,push
+q0,(,Z,q0,AZ
+q0,(,A,q0,AA
+q0,),A,q0,eps
+q0,eps,Z,q1,eps

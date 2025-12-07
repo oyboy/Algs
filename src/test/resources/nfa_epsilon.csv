@@ -1,0 +1,6 @@
+from,event,to
+S0,e,S1
+S0,e,S2
+S1,a,S3
+S2,b,S3
+S3,e,S4
