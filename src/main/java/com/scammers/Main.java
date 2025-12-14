@@ -3,6 +3,8 @@ package com.scammers;
 import com.scammers.lab3.DFATools;
 import com.scammers.lab4.KMP;
 import com.scammers.lab4.RegexInterpreter;
+import com.scammers.lab5.XmlLexer;
+import com.scammers.lab5.XmlPDA;
 import com.scammers.lab6.PDA;
 import com.scammers.lab6.PDALoader;
 import com.scammers.lab7.CNFInterpreter;
@@ -27,10 +29,11 @@ public class Main {
         //lab2();
         //lab3();
         //lab4();
+        lab5();
         //lab6();
         //lab7();
         //lab8();
-        lab9();
+        //lab9();
     }
 
     private static void lab1(){
@@ -145,6 +148,27 @@ public class Main {
         return sb.toString();
     }
 
+    private static void lab5(){
+        XmlLexer lexer = new XmlLexer();
+        XmlPDA pda = new XmlPDA();
+
+        String valid = "<html><body><div>Привет</div></body></html>";
+        System.out.println("\n--- Тест 1: Валидный ---");
+        pda.accepts(lexer.tokenize(valid));
+
+        String invalidNest = "<root><i><b>Text</i></b></root>";
+        System.out.println("\n--- Тест 2: Нарушение вложенности ---");
+        pda.accepts(lexer.tokenize(invalidNest));
+
+        String extraClose = "<root></root></root>";
+        System.out.println("\n--- Тест 3: Лишний закрывающий ---");
+        pda.accepts(lexer.tokenize(extraClose));
+
+        String custom = "<rpg><game>Baldurs Gate 3</game><score>10</score></rpg>";
+        System.out.println("\n--- Тест 4: Произвольные теги ---");
+        pda.accepts(lexer.tokenize(custom));
+    }
+
     private static void lab6() {
         try {
             PDA pda = PDALoader.loadFromCSV(
@@ -202,7 +226,7 @@ public class Main {
                 "S->eps"
         );
 
-        String input = "(()(()))()";
+        String input = "()())";
 
         System.out.println("Грамматика: " + grammar);
         System.out.println("Строка: " + input);
@@ -219,6 +243,7 @@ public class Main {
             System.err.println("Ошибка: строка не соответствует грамматике.");
         }
     }
+
     private static void lab9() {
         // 1. I#100 -> 101
         // 2. Z#1111 -> 0000
@@ -228,7 +253,6 @@ public class Main {
 
         runCPU("I#100Z#1111I#1011D#1100", "tape_stream.txt");
     }
-
 
     private static void runCPU(String tape, String outFile) {
         TuringMachine tm = new TuringMachine("q0", tape);
