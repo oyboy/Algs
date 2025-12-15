@@ -62,7 +62,14 @@ public class XmlPDA {
                 }
                 else if (token.getType() == XmlToken.Type.TEXT) {
                     // Правило: q0, text, Z -> q0, Z (игнор)
-                    currentState = State.Q0;
+                    if (stack.isEmpty()) {
+                        System.out.println("    -> Ошибка: Текст \"" + token.getValue() + "\" вне корневого элемента.");
+                        currentState = State.Q_ERROR;
+                    } else {
+                        System.out.println("  (Текст внутри <" + stack.peek() + ">)");
+                        currentState = State.Q0;
+                    }
+                    break;
                 }
                 break;
 

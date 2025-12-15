@@ -16,7 +16,7 @@ import com.scammers.lb9.TuringMachine;
 import com.scammers.viz.DFAVisualizer;
 import com.scammers.viz.NFAVisualizer;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -151,22 +151,17 @@ public class Main {
     private static void lab5(){
         XmlLexer lexer = new XmlLexer();
         XmlPDA pda = new XmlPDA();
+        StringBuilder xml_text = new StringBuilder();
 
-        String valid = "<html><body><div>Привет</div></body></html>";
-        System.out.println("\n--- Тест 1: Валидный ---");
-        pda.accepts(lexer.tokenize(valid));
-
-        String invalidNest = "<root><i><b>Text</i></b></root>";
-        System.out.println("\n--- Тест 2: Нарушение вложенности ---");
-        pda.accepts(lexer.tokenize(invalidNest));
-
-        String extraClose = "<root></root></root>";
-        System.out.println("\n--- Тест 3: Лишний закрывающий ---");
-        pda.accepts(lexer.tokenize(extraClose));
-
-        String custom = "<rpg><game>Baldurs Gate 3</game><score>10</score></rpg>";
-        System.out.println("\n--- Тест 4: Произвольные теги ---");
-        pda.accepts(lexer.tokenize(custom));
+        try(BufferedReader br = new BufferedReader(new FileReader( "pom.xml"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                xml_text.append(line);
+            }
+        } catch (IOException ex) {
+            System.err.println("Error opening file: " + ex.getMessage());
+        }
+        pda.accepts(lexer.tokenize(xml_text.toString()));
     }
 
     private static void lab6() {
